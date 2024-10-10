@@ -1,5 +1,5 @@
 {
-	"name": "@atas/webapp-ui-shared",
+	"name": "@atas/weblib-ui-js",
 	"version": "1.2.45",
 	"description": "Shared UI libraries for mobile-first web app development",
 	"main": "dist/index.js",
@@ -23,7 +23,7 @@
 	"license": "ISC",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/atas/webapp-ui-shared.git"
+		"url": "git+https://github.com/atas/weblib-ui-js.git"
 	},
 	"publishConfig": {
 		"registry": "https://npm.pkg.github.com"

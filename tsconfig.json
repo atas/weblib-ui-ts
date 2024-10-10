@@ -41,7 +41,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"paths": {
 			"*": ["dist/*"],
-			"@atas/webapp-ui-shared": ["dist"]
+			"@atas/weblib-ui-js": ["dist"]
 		}
 	},
 	"include": ["src/**/*"],
