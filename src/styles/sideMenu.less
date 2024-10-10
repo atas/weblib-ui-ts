@@ -1,0 +1,136 @@
+.sideMenu {
+  &.enter-active,
+  &.enter-done {
+    display: block;
+  }
+
+  &.enter {
+    display: block;
+    .contents {
+      transform: translateX(100%);
+    }
+  }
+
+  &.enter-active {
+    display: block;
+    .contents {
+      transform: translateX(0);
+      transition: transform ease-out 0.2s;
+    }
+  }
+
+  &.exit-active {
+    display: block;
+    .contents {
+      transform: translateX(100%);
+      transition: transform ease-in 0.2s;
+    }
+  }
+
+  .contents {
+    @contentsBg: #333;
+    background: @contentsBg;
+    padding: 20px 0 20px 0;
+    height: @vh100;
+    overflow-y: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    @media @desktop {
+      width: 350px;
+    }
+
+    @media @mobile {
+      max-width: 350px;
+      width: 85vw;
+    }
+
+    .closeBtn {
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding: 15px;
+
+      &.active {
+        color: @accentSecondary;
+      }
+    }
+
+    .logoImgLink {
+      display: grid;
+      align-items: center;
+
+      img {
+        margin: 0 auto;
+        height: 48px;
+      }
+    }
+
+    .primaryLink {
+      padding: 10px 10px 10px 20px;
+      .material-icons {
+        margin-right: 5px;
+      }
+    }
+
+    .secondaryLink {
+      padding: 6px 5px 6px 20px;
+      color: #ccc;
+      .material-icons {
+        margin-right: 5px;
+      }
+    }
+
+    .primaryLink,
+    .secondaryLink {
+      display: block;
+      width: 100%;
+      text-align: left;
+
+      @media @desktop {
+        &:hover {
+          background: darken(@contentsBg, 5%);
+        }
+      }
+
+      &.active {
+        background: @accentSecondary;
+      }
+
+      &.selected {
+        background: #555;
+      }
+
+      .material-icons {
+        margin-top: -5px;
+      }
+    }
+
+    .bottomInfo {
+      display: block;
+      font-size: 12px;
+      margin-top: 10px;
+      text-align: center;
+
+      a {
+        display: inline-block;
+        margin: 0 10px;
+      }
+    }
+
+    .pointsBalance {
+      padding: 0px 10px 5px 20px;
+      color: #ffbf00;
+
+      .topUpBtn {
+        margin-top: 15px;
+      }
+    }
+
+    .versions {
+      margin-top: 5px;
+      font-size: 11px;
+    }
+  }
+}

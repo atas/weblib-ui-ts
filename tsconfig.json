@@ -1,0 +1,49 @@
+{
+	"compileOnSave": true,
+	"compilerOptions": {
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"declaration": true,
+		"declarationDir": "dist/types",
+		"target": "ES2018",
+		"esModuleInterop": true,
+		"module": "CommonJS",
+		"sourceMap": true,
+		"incremental": true,
+		// "sourceRoot": "app",
+		"lib": [
+			"es2017",
+			"es2016",
+			"dom",
+			"es2015",
+			"ES2018",
+			"es5",
+			"es6",
+			"webworker"
+			/*, "scripthost"*/
+		],
+		"jsx": "react",
+		"moduleResolution": "node",
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"removeComments": false,
+		"preserveConstEnums": true,
+		"skipLibCheck": true,
+		"pretty": true,
+		"strict": true,
+		"typeRoots": ["./node_modules/@types"],
+		"noImplicitReturns": true,
+		"rootDir": "src",
+		"outDir": "dist",
+		"baseUrl": "",
+		"forceConsistentCasingInFileNames": true,
+		"paths": {
+			"*": ["dist/*"],
+			"@atas/webapp-ui-shared": ["dist"]
+		}
+	},
+	"include": ["src/**/*"],
+	"exclude": ["dist", "esm", "node_modules"]
+}

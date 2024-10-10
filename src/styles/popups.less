@@ -1,0 +1,414 @@
+@import (reference) 'reference';
+
+@blurPx: 5px;
+
+// region Functions
+.slidingPopupTransform(@translateY) {
+	@media @desktop {
+		transform: translate(-50%, @translateY);
+	}
+	@media @mobile {
+		transform: translateY(@translateY);
+	}
+}
+
+.standardPopupTransform(@scalePercent) {
+	@media @desktop {
+		transform: translate(-50%, -50%) scale(@scalePercent);
+	}
+	@media @mobile {
+		transform: translateY(-50%) scale(@scalePercent);
+	}
+}
+// endregion
+
+.popupBackdrop {
+	position: fixed;
+	// display: block;
+	width: 100%;
+	height: @vh100;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 9999;
+	overflow: hidden;
+	color: #999;
+	font-size: 16px;
+	will-change: auto;
+	touch-action: none;
+
+	&,
+	* {
+		overscroll-behavior-y: contain;
+	}
+
+	backdrop-filter: blur(@blurPx);
+	-webkit-backdrop-filter: blur(@blurPx);
+	animation: fadeInBackdrop forwards ease 0.2s;
+
+	@keyframes fadeInBackdrop {
+		0% {
+			background: rgba(0, 0, 0, 0.1);
+		}
+		100% {
+			background: rgba(0, 0, 0, 0.7);
+		}
+	}
+
+	// When popup is closing
+	&.exit-active {
+		will-change: auto;
+		animation: fadeOutBackdrop forwards ease 0.2s;
+
+		@keyframes fadeOutBackdrop {
+			0% {
+				background: rgba(0, 0, 0, 0.7);
+				backdrop-filter: blur(@blurPx);
+				-webkit-backdrop-filter: blur(@blurPx);
+			}
+			100% {
+				background: rgba(0, 0, 0, 0);
+				backdrop-filter: blur(0);
+				-webkit-backdrop-filter: blur(0);
+			}
+		}
+
+		.slidingPopupContents {
+			transition: all 0.3s ease-in;
+			.slidingPopupTransform(100%);
+		}
+
+		.standardPopupContents {
+			opacity: 0;
+			transition: all 0.2s ease-in;
+			.standardPopupTransform(80%);
+		}
+	}
+
+	&.enter {
+		.standardPopupContents {
+			opacity: 0;
+			.standardPopupTransform(80%);
+		}
+		.slidingPopupContents {
+			.slidingPopupTransform(100%);
+		}
+	}
+
+	&.enter-active {
+		.standardPopupContents {
+			opacity: 1;
+			transition: all 0.2s ease-out;
+			.standardPopupTransform(100%);
+		}
+		.slidingPopupContents {
+			transition: all 0.3s ease-out;
+			.slidingPopupTransform(0);
+		}
+	}
+
+	.standardPopupContents {
+		background: @topBarBgColor;
+		box-shadow: 0px 0px 6px 6px #555;
+		text-align: left;
+		position: fixed;
+		top: 50%;
+		will-change: auto;
+		border-radius: 5px;
+		max-height: calc(@vh100 - 12px);
+
+		&,
+		* {
+			overscroll-behavior-y: contain;
+		}
+		.standardPopupTransform(100%);
+
+		@media @desktop {
+			left: 50%;
+		}
+
+		@media @mobile {
+			width: calc(100% - 12px);
+			margin: 0 6px;
+		}
+
+		.toolBar {
+			div.text {
+				color: #ccc;
+				padding: 15px;
+			}
+
+			.close {
+				float: right;
+				padding: 10px;
+
+				&:hover {
+					background-color: lighten(@topBarBgColor, 4%);
+				}
+
+				&.active {
+					background-color: lighten(@topBarBgColor, 10%);
+				}
+			}
+		}
+
+		.child {
+			box-sizing: border-box;
+			margin: 0 auto;
+			padding: 0px 25px 15px 25px;
+			max-height: calc(@vh100 - 150px);
+			overflow-y: auto;
+		}
+
+		.actions {
+			text-align: center;
+			display: flex;
+
+			button {
+				flex: 1;
+				min-width: 150px;
+				margin: 10px 5px 15px 5px;
+
+				&:first-child {
+					margin-left: 10px;
+				}
+
+				&:last-child {
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+
+	.slidingPopupContents {
+		@borderRadius: 10px;
+		background: @topBarBgColor;
+		text-align: left;
+		position: fixed;
+		bottom: 0;
+		will-change: auto;
+		border-top-left-radius: @borderRadius;
+		border-top-right-radius: @borderRadius;
+		box-shadow: 0px 0px 4px 2px #555;
+		max-height: 85vh;
+		display: flex;
+		flex-direction: column;
+		z-index: 10000;
+		.slidingPopupTransform(0);
+		min-height: 100px;
+		padding-bottom: calc(env(safe-area-inset-bottom) / 2);
+
+		&,
+		* {
+			overscroll-behavior-y: contain;
+		}
+
+		.popupTitles {
+			display: flex;
+
+			.title {
+				padding: 12px 10px;
+				font-size: 15px;
+				cursor: pointer;
+
+				.material-icons {
+					font-size: 18px;
+				}
+
+				&:not(.active) {
+					background-color: #111;
+					color: #777;
+				}
+
+				&:first-child {
+					border-top-left-radius: @borderRadius;
+				}
+			}
+		}
+
+		//animation: slideInMenu 0.6s forwards ease-out;
+		//
+		//@keyframes slideInMenu {
+		//	0% {
+		//		.slidingPopupTransform(100%);
+		//	}
+		//	100% {
+		//		.slidingPopupTransform(0);
+		//	}
+		//}
+
+		@media @desktop {
+			left: 50%;
+			min-width: 600px;
+		}
+
+		@media @mobile {
+			width: 100%;
+			text-align: center;
+		}
+
+		.close {
+			position: absolute;
+			right: 0;
+			padding: 10px;
+			border-top-right-radius: 10px;
+
+			&:hover {
+				background-color: lighten(@topBarBgColor, 4%);
+			}
+
+			&.active {
+				background-color: lighten(@topBarBgColor, 10%);
+			}
+		}
+
+		.toolBar {
+			//overscroll-behavior: none;
+			//overflow-scrolling: touch;
+			touch-action: none;
+
+			div.text {
+				color: #ccc;
+				padding: 15px;
+			}
+
+			.dragBar {
+				background: #777;
+				height: 3px;
+				display: block;
+				border-top-left-radius: 5px;
+				border-top-right-radius: 5px;
+				width: 25%;
+				position: absolute;
+				left: 50%;
+				transform: translateX(-50%);
+				top: -11px;
+				border-top: 8px solid #333;
+				border-left: 8px solid #333;
+				border-right: 8px solid #333;
+				box-sizing: content-box;
+			}
+		}
+
+		.child {
+			@bgColor: @topBarBgColor;
+			@borderColor: @topBarBorderBottomColor;
+			overflow-y: auto;
+			height: inherit;
+
+			a.popupLink,
+			button.popupBtn {
+				display: flex;
+				min-height: 42px;
+				width: 100%;
+				text-decoration: none;
+				text-align: left;
+				padding: 12px 15px;
+				white-space: nowrap;
+				font-size: 16px;
+				color: #999;
+				box-sizing: border-box;
+				border-bottom: 1px solid @borderColor;
+
+				&:last-child {
+					border-bottom: none;
+				}
+
+				&:hover {
+					background-color: lighten(@bgColor, 3%);
+				}
+			}
+		}
+	}
+}
+
+.popupMenu {
+	a,
+	button {
+		display: block;
+		min-height: 42px;
+		width: 100%;
+		text-decoration: none;
+		padding: 12px 15px;
+		white-space: nowrap;
+		font-size: 16px;
+		color: white;
+		box-sizing: border-box;
+		border-bottom: 1px solid @topBarBorderBottomColor;
+
+		@media @desktop {
+			text-align: left;
+		}
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		&:hover {
+			background-color: lighten(@topBarBgColor, 3%);
+		}
+	}
+
+	img.menuIcon,
+	span.menuIcon {
+		width: 32px;
+		height: 32px;
+		padding-right: 10px;
+		vertical-align: middle;
+	}
+}
+
+.loginPagePopup {
+	padding: 15px 20px 30px 20px;
+
+	.freePointsDiv {
+		margin-bottom: 10px;
+		.counter {
+			color: white;
+		}
+	}
+
+	.bottomLinks {
+		text-align: center;
+	}
+}
+
+.welcomePopupDiv {
+	@media @mobile {
+		text-align: center;
+	}
+	.helloWinkImgDiv {
+		text-align: center;
+		img {
+			width: 64px;
+			height: 64px;
+			float: right;
+		}
+	}
+
+	.moreDesc {
+		font-size: 14px;
+		font-style: italic;
+	}
+
+	.highlightedMsg {
+		color: white;
+	}
+
+	.feedbackMsg {
+		font-size: 14px;
+	}
+
+	.cookiesMsg {
+		text-align: center;
+		margin-bottom: 0;
+		font-size: 14px;
+	}
+}
+
+.pmInitForm {
+	min-width: 300px;
+	&.sliding {
+		padding: 10px;
+	}
+}
