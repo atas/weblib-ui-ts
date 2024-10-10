@@ -1,64 +1,64 @@
 name: Build and Publish to GitHub Packages
 
 on:
-  push:
+    push:
 
 jobs:
-  build_and_publish:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
+    build_and_publish:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            packages: write
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '18'
 
-      - name: Cache npm dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm  # This caches the npm cache, not node_modules directly
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
+            - name: Cache npm dependencies
+              uses: actions/cache@v2
+              with:
+                  path: ~/.npm # This caches the npm cache, not node_modules directly
+                  key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-npm-
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Run Jest tests
-        run: npm test
+            - name: Run Jest tests
+              run: npm test
 
-      - name: Just build don't ship
-        if: github.ref != 'refs/heads/master'
-        run: |
-          npm run build
+            - name: Just build don't ship
+              if: github.ref != 'refs/heads/main'
+              run: |
+                  npm run build
 
-      - name: Set next version
-        run: |
-          next_version=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags/v* | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 | awk -F '.' '{print $1 "." $2 "." $3+1}')
-          next_version=${next_version#v}
-          echo "next_version=$next_version"
-          echo "next_version=$next_version" >> $GITHUB_ENV
+            - name: Set next version
+              run: |
+                  next_version=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags/v* | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 | awk -F '.' '{print $1 "." $2 "." $3+1}')
+                  next_version=${next_version#v}
+                  echo "next_version=$next_version"
+                  echo "next_version=$next_version" >> $GITHUB_ENV
 
-      - name: Bump version and create new tag
-        if: github.ref == 'refs/heads/master'
-        run: |
-          echo '//npm.pkg.github.com/:_authToken=${NPM_TOKEN}' >> .npmrc
-          git config user.name "GitHub Actions"
-          git config user.email "<actions@github.com>"
-          
-          # Update package.json with the new version
-          jq ".version = \"${{ env.next_version }}\"" package.json > tmp.json && mv tmp.json package.json
-          
-          git tag -a v${{ env.next_version }} -m "Release v${{ env.next_version }}"
-          npm run ship
-          git push origin v${{ env.next_version }}
-        env:
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            - name: Bump version and create new tag
+              if: github.ref == 'refs/heads/main'
+              run: |
+                  echo '//npm.pkg.github.com/:_authToken=${NPM_TOKEN}' >> .npmrc
+                  git config user.name "GitHub Actions"
+                  git config user.email "<actions@github.com>"
+
+                  # Update package.json with the new version
+                  jq ".version = \"${{ env.next_version }}\"" package.json > tmp.json && mv tmp.json package.json
+
+                  git tag -a v${{ env.next_version }} -m "Release v${{ env.next_version }}"
+                  npm run ship
+                  git push origin v${{ env.next_version }}
+              env:
+                  NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
