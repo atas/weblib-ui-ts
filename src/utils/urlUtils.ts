@@ -119,9 +119,12 @@ export function isHttpsUrl(url: string) {
 }
 
 export function getUrlWithQuery(url: string, query: { [key: string]: any }) {
-	const urlObj = new URL(url);
-	Object.keys(query).filter(k => query[k]).forEach(key => {
-		urlObj.searchParams.set(key, query[key]);
-	});
-	return urlObj.toString();
+	let q = qs.stringify(query, {skipNull: true, skipEmptyString: true});
+	q = q ? `?${q}` : '';
+
+	if (!url.endsWith('/')) {
+		url += '/';
+	}
+
+	return url + q;
 }
