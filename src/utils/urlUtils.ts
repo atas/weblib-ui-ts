@@ -117,3 +117,11 @@ export function isHttpsUrl(url: string) {
 		/^https:\/\/[a-zAz0-9-]+(\.[a-zA-Z0-9-]+)*(\:[0-9]+)?(\/[^?\s]*)?(\?[^#\s]*)?(#[^\s]*)?$/;
 	return typeof url === 'string' && regex.test(url);
 }
+
+export function getUrlWithQuery(url: string, query: { [key: string]: any }) {
+	const urlObj = new URL(url);
+	Object.keys(query).filter(k => query[k]).forEach(key => {
+		urlObj.searchParams.set(key, query[key]);
+	});
+	return urlObj.toString();
+}
