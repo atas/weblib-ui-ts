@@ -5,7 +5,7 @@ module.exports = {
 			createClass: 'createReactClass', // Regex for Component Factory to use,
 			// default to "createReactClass"
 			pragma: 'React', // Pragma to use, default to "React"
-			fragment: 'Fragment', // Fragment to use (maybe a property of <pragma>), default to "Fragment"
+			fragment: 'Fragment', // Fragment to use (may be a property of <pragma>), default to "Fragment"
 			version: 'detect', // React version. "detect" automatically picks the version you have installed.
 		},
 		propWrapperFunctions: [
@@ -45,12 +45,12 @@ module.exports = {
 		},
 		ecmaVersion: 2018,
 		sourceType: 'module',
-		tsconfigRootDir: __dirname,
-		project: './tsconfig.eslint.json',
+		project: './tsconfig.json',
 	},
-	plugins: ['react', '@typescript-eslint', 'promise'],
+	plugins: ['react', '@typescript-eslint', 'promise', 'unused-imports'],
 	rules: {
-		indent: ['error', 'tab'],
+		'unused-imports/no-unused-imports': 'error',
+		indent: ['error', 'tab', { SwitchCase: 1 }],
 		'no-tabs': 0,
 		semi: 'off',
 		'require-await': 'off', // disabled in favour of @typescript-eslint/require-await

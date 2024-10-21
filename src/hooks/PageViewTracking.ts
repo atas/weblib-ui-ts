@@ -15,7 +15,7 @@ export const useMatomoPageView = () => {
 			_paq.push(['setCustomUrl', window.location.href]);
 			_paq.push(['trackPageView']);
 		}
-	}, [location]);
+	}, [location.pathname.toString(), location.search.toString()]);
 };
 
 /**
