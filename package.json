@@ -48,7 +48,7 @@
 		"workbox-strategies": "^7.1.0"
 	},
 	"devDependencies": {
-		"@babel/preset-env": "^7.25.2",
+		"@babel/preset-env": "^7.25.8",
 		"@babel/preset-react": "^7.24.7",
 		"@babel/preset-typescript": "^7.24.7",
 		"@types/jest": "^29.5.12",
